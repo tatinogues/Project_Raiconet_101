@@ -150,3 +150,9 @@ class ETL:
             csv_buffer.getvalue().encode()), bucket_name, s3_path)
 
         print('Data loaded done')
+        
+
+df_guias, df_motivos = ETL.extract()
+df = ETL.transform(df_guias, df_motivos)
+
+ETL.load(df)
