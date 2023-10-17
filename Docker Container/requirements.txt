@@ -1,8 +1,0 @@
-torch
-pytorch-forecasting==1.0.0
-pytorch-lightning==1.9.5
-pytorch_optimizer==2.11.2
-pandas==1.5.3
-boto3
-gluonts==0.13.2
-pyodbc
