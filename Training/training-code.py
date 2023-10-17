@@ -1,13 +1,9 @@
 ## etl + train + inference
 
-from etl import ETL
 from train import Train
 from inference import Inference
 
-df_guias, df_motivos = ETL.extract()
-df = ETL.transform(df_guias, df_motivos)
-
-ETL.load(df)
+df = Train.read_data_s3()
 
 predictor = Train.train(df)
 
