@@ -55,7 +55,7 @@ class Train:
                                     num_layers=4,  # el modelo posee tres capas con un default de 40 nodos por capa
                                     dropout_rate=0.2,  # seteo de 20% de las units en una layer en cero de forma random
                                     trainer_kwargs={
-                                        'max_epochs': 10},  # 210 epochs
+                                        'max_epochs': 210},  # 210 epochs
                                     distr_output=NegativeBinomialOutput())  # el default es Distribucion t-student, pero al usar negative binomial permite que las predicciones no tomen valores negativos
 
         predictor = estimator.train(train_ds)

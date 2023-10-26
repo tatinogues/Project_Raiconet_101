@@ -9,7 +9,7 @@ button = html.Div(
     [
         dbc.Button(
             "EMPEZAR",
-            href="/forecasting",
+            href="/forecast",
             #download="my_data.txt",
             external_link=False,
            # color='dark',
