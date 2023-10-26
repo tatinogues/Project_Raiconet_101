@@ -16,4 +16,4 @@ COPY ./credentials.py .
 COPY ./training-code.py .
 COPY ./inference-code.py .
 
-#CMD ["python", "script.py"]
+CMD ["python", "training-code.py"]
