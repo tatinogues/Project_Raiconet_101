@@ -5,4 +5,3 @@ pytorch_optimizer==2.11.2
 pandas==1.5.3
 boto3
 gluonts==0.13.2
-pyodbc

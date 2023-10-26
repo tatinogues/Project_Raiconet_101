@@ -12,7 +12,7 @@ from dash_bootstrap_templates import load_figure_template
 
 load_figure_template(["darkly"])
 
-dash.register_page(__name__, path='/forecasting', name='FORECASTING')
+dash.register_page(__name__, path='/forecast', name='FORECAST')
 
 ##https://fontawesome.bootstrapcheatsheets.com/
 
@@ -30,14 +30,14 @@ dropdown = dcc.Dropdown(
 first_card = dbc.Card(
     dbc.CardBody(
         [
-            html.H5("FORECASTING", className="card-title"),
+            html.H5("FORECAST", className="card-title"),
             html.P(" "),
-            html.P("Seleccione el motivo para obtener las predicciones de las proximas 10 semanas"),
+            html.P("Seleccione el motivo para obtener las predicciones de las próximas 10 semanas"),
             dcc.Download(id="download-dataframe-xlsx"),
             dropdown,
             dbc.Button('Predict', id="btn_saldos", href='http://127.0.0.1:8088/control', external_link=True,
                        color="primary", style={'margin-top': '20px'}),
-            dbc.Button('Dashboard', id="btn_dashboard", color="primary",
+            dbc.Button('Analytics', id="btn_dashboard", color="primary",href='http://127.0.0.1:8085/dashboard',
                        style={'margin-top': '20px', 'margin-left': '8px'}),
         ]
     )
@@ -55,7 +55,7 @@ layout = html.Div(
         dbc.Col([dbc.Card(dbc.CardBody([html.P(" "),
                                         html.H5("Motivo", className="card-title"),
                                         html.P(" "),
-                                        html.P("El pronostico de kilos brutos para la semana del ... es .... kg")])),
+                                        html.P("El pronóstico de kilos brutos para la semana del ... es .... kg")])),
                 dcc.Graph(id="time-series-chart")], width=8, style={'marginLeft': '20px',
                                                                      'margin-right': '30px',
                                                                      'marginTop': '3px',

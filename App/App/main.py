@@ -11,10 +11,11 @@ from dash_bootstrap_templates import load_figure_template
 
 VALID_USERNAME_PASSWORD_PAIRS = {
     'tatinogues': '1234',
-    'hello': 'world'
+    'hello': 'world',
+    'demo':'helloworld',
 }
 
-app = dash.Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.CYBORG])
+app = dash.Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.CYBORG,  dbc.icons.BOOTSTRAP])
 
 ##Auth de ingreso
 auth = dash_auth.BasicAuth(

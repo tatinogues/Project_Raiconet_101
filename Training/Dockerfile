@@ -10,7 +10,6 @@ COPY ./requirements.txt .
 
 RUN pip install -r requirements.txt
 
-COPY ./etl.py .
 COPY ./train.py .
 COPY ./inference.py .
 COPY ./credentials.py .

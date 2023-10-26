@@ -5,7 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f501b6b7-87b4-484a-889a-fb5591f77698" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/App/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/functions/functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/App/functions/functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/App/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/pages/forecasting.py" beforeDir="false" afterPath="$PROJECT_DIR$/App/pages/forecasting.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/pages/tablero.py" beforeDir="false" afterPath="$PROJECT_DIR$/App/pages/tablero.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/App/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Remote Task/etl.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Remote Task/etl.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Remote Task/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Remote Task/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Remote Task/pythonrun.bat.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Training/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../Training/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Training/etl.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Training/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Training/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,12 +42,12 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "last_opened_file_path": "C:/Users/Bravo15/Desktop/raico/Proyecto final/Project_Raiconet_101/App/pages",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PythonContentEntriesConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Bravo15/Desktop/raico/Proyecto final/Project_Raiconet_101/App/pages&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PythonContentEntriesConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Bravo15\Desktop\raico\Proyecto final\Project_Raiconet_101\App\pages" />

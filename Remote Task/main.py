@@ -1,7 +1,17 @@
 from etl import ETL
 
-df_guias, df_motivos = ETL.extract()
+### limpieza y subier datos para el modelo
 
-df = ETL.transform(df_guias, df_motivos)
+df_guias = ETL.extract()
+
+df = ETL.transform(df_guias)
 
 ETL.load(df)
+
+### limpieza y subir datos para analytics
+
+df_guias = ETL.extract()
+
+df_analytics= ETL.clean_analytics(df_guias)
+
+ETL.load_analytics(df_analytics)
