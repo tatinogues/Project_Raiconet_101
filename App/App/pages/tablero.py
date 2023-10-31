@@ -1,4 +1,5 @@
 import dash
+import dcc as dcc
 from dash import Dash, dcc, html, Input, Output, callback
 import plotly.express as px
 import dash_bootstrap_components as dbc
@@ -147,21 +148,65 @@ cards = html.Div(
             className="mb-4",
         )])
 
+card_prueba = dbc.Card(
+    dbc.CardBody(
+        [
+            html.H4("Aca va el piechart", className="card-title"),
+            html.H6("Card subtitle", className="card-subtitle"),
+            html.P(
+                "Some quick example text to build on the card title and make "
+                "up the bulk of the card's content.",
+                className="card-text",
+            ),
+            dbc.CardLink("Card link", href="#"),
+            dbc.CardLink("External link", href="https://google.com"),
+        ]
+    ),
+    style={"width": "18rem"},
+)
 
-layout = html.Div(
+segunda_fila= html.Div(
+    [
+        dbc.Row(
+            [
+                dbc.Col(card_prueba),
+                dbc.Col(dcc.Graph(id="line_graph")),
+            ]
+        )])
+
+
+
+layout = html.Div([
     dbc.Row([
         dbc.Col([first_card], width=3, style={'marginLeft': '30px',
                                               'margin-right': '0px',
                                               'marginTop': '3px',
                                               'background-color': 'black'}),
-        dbc.Col([cards], width=8, style={  # 'marginLeft': '20px',
-            'margin-right': '30px',
-            'marginTop': '3px',
-            # 'margin': '30px',
-            'background-color': 'black'}),
+        dbc.Col([cards, segunda_fila], width=8, style={  # 'marginLeft': '20px',
+                                                         'margin-right': '3px',
+                                                                'marginTop': '3px',
+                                                                # 'margin': '30px',
+                                                                'background-color': 'black'})]),
+
 
     ])
-)
+
+
+
+
+###callback line graph
+@callback(
+    Output("line_graph", "figure"),
+    Input("ticker_motivo", "value"))
+def display_time_series(value):
+
+    dff = df[df['Nombre Motivo'] == value]
+
+    fig = px.line(dff, x='mes_año', y='kilos facturables', markers=True, width=657, height=400)
+    fig.update_layout(xaxis_title='Mes', yaxis_title=f'{value}')
+    return fig
+
+
 
 
 ###callback cards
