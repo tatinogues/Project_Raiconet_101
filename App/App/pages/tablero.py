@@ -169,7 +169,7 @@ segunda_fila= html.Div(
     [
         dbc.Row(
             [
-                dbc.Col(card_prueba),
+                dbc.Col(dcc.Graph(id='pie_chart')),
                 dbc.Col(dcc.Graph(id="line_graph")),
             ]
         )])
@@ -183,14 +183,45 @@ layout = html.Div([
                                               'marginTop': '3px',
                                               'background-color': 'black'}),
         dbc.Col([cards, segunda_fila], width=8, style={  # 'marginLeft': '20px',
-                                                         'margin-right': '3px',
+                                                         #'margin-right': '3px',
                                                                 'marginTop': '3px',
                                                                 # 'margin': '30px',
                                                                 'background-color': 'black'})]),
 
 
     ])
+### callback pie chart
+@callback(
+    Output("pie_chart", "figure"),
+    [Input('ticker_motivo', 'value'),
+     Input('ticker_mes', 'value')])
+def display_pie_chart(value, date):
 
+    dff = df[df['Nombre Motivo'] == value]
+    dff = dff[dff['mes_año'] == date]
+    colors= ['#77b300','#fd7e14', '#6f42c1', '#2a9fd6', '#2a9fd6']
+    fig = px.pie(dff,
+                 values='kilos facturables',
+                 names='Categoria',
+                 hole=.4,
+                 width=307.7, height=400,
+                 color_discrete_map={'Casual': 'lightcyan',
+                                     'Premium': 'cyan',
+                                     'Standard': 'royalblue',
+                                     'Select': 'darkblue'})
+
+    fig.update_layout(
+        margin=dict(l=20, r=20, t=10, b=10),
+        legend=dict(
+            orientation="h",
+            yanchor="top",
+            y=1.02,
+            xanchor="right",
+            x=1
+        ),
+        legend_title_text='Categoria',
+    )
+    return fig
 
 
 
@@ -202,8 +233,16 @@ def display_time_series(value):
 
     dff = df[df['Nombre Motivo'] == value]
 
-    fig = px.line(dff, x='mes_año', y='kilos facturables', markers=True, width=657, height=400)
-    fig.update_layout(xaxis_title='Mes', yaxis_title=f'{value}')
+    dff = dff.groupby('mes_año')['kilos facturables'].sum().reset_index()
+
+    dff.rename(columns={'mes_año': 'Mes'}, inplace=True)
+
+    fig = px.line(dff, x='Mes', y='kilos facturables', markers=True, width=657, height=400)
+    fig.update_traces(line_color='#2a9fd6')  ####77b300  ####6610f2 ####2a9fd6
+    fig.update_layout(xaxis_title='Período',
+                      yaxis_title='kilos',
+                      title=f'Evolución kilos facturables {value}'
+                      )
     return fig
 
 
