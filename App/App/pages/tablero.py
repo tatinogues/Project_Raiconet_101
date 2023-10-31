@@ -182,8 +182,8 @@ layout = html.Div([
                                               'margin-right': '0px',
                                               'marginTop': '3px',
                                               'background-color': 'black'}),
-        dbc.Col([cards, segunda_fila], width=8, style={  # 'marginLeft': '20px',
-                                                         #'margin-right': '3px',
+        dbc.Col([cards, segunda_fila], width=8, style={  'marginLeft': '0px',
+                                                         'margin-right': '0px',
                                                                 'marginTop': '3px',
                                                                 # 'margin': '30px',
                                                                 'background-color': 'black'})]),
@@ -199,16 +199,13 @@ def display_pie_chart(value, date):
 
     dff = df[df['Nombre Motivo'] == value]
     dff = dff[dff['mes_año'] == date]
-    colors= ['#77b300','#fd7e14', '#6f42c1', '#2a9fd6', '#2a9fd6']
+    colors= ['#77b300','#fd7e14', '#6f42c1', '#2a9fd6']
     fig = px.pie(dff,
                  values='kilos facturables',
                  names='Categoria',
                  hole=.4,
-                 width=307.7, height=400,
-                 color_discrete_map={'Casual': 'lightcyan',
-                                     'Premium': 'cyan',
-                                     'Standard': 'royalblue',
-                                     'Select': 'darkblue'})
+                 width=307.799, height=400,
+                 )
 
     fig.update_layout(
         margin=dict(l=20, r=20, t=10, b=10),
