@@ -22,25 +22,19 @@ df = get_analytics_s3()
 print(df.columns)
 # https://www.youtube.com/watch?v=bDXypNBH1uw
 
-dropdown1 = dcc.Dropdown(
-    id="ticker_tipo2",
-    options=[{"label": family, "value": family} for family in df["Tipo2"].unique()],
-    # value="USA FLAT",
-    placeholder="Seleccionar tipo de servicio",
-    clearable=True,
-    style={'background-color': 'grey'}
-)
+ultimo_mes = list(df.mes_año.unique())[-1]
+dff= df[df['mes_año']== ultimo_mes]
 
-dropdown2 = dcc.Dropdown(
+dropdown1 = dcc.Dropdown(
     id="ticker_motivo",
-    options=[{"label": family, "value": family} for family in df["Nombre Motivo"].unique()],
+    options=[{"label": family, "value": family} for family in dff["Nombre Motivo"].unique()],
     value="USA FLAT",
     placeholder="Seleccionar motivo",
     clearable=True,
     style={'background-color': 'grey'}
 )
 
-dropdown3 = dcc.Dropdown(
+dropdown2 = dcc.Dropdown(
     id="ticker_mes",
     options=[{"label": family, "value": family} for family in df["mes_año"].unique()],
     value="2023-09",
@@ -53,13 +47,11 @@ first_card = html.Div(
         dbc.CardBody(
             [
                 html.H5("ANALYTICS", className="card-title"),
-                # html.P(" "),
                 html.P("Utilizar los filtros para ver los insights"),
-                # dropdown1,
+                html.P(" "),
+                dropdown1,
                 html.P(" "),
                 dropdown2,
-                html.P(" "),
-                dropdown3,
                 dbc.Button('Forecast', id="btn_forecast", color="primary", href='http://127.0.0.1:8085/forecast',
                            style={'margin-top': '20px', 'margin-left': '8px'}),
             ]

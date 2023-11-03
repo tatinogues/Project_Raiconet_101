@@ -43,6 +43,88 @@ first_card = dbc.Card(
 
 # https://towardsdatascience.com/create-a-professional-dasbhoard-with-dash-and-css-bootstrap-e1829e238fc5
 
+### 3 cards arriba de grafico
+card_icon = {
+    "color": "white",
+    "textAlign": "center",
+    "fontSize": 30,
+    "margin": "auto",
+}
+
+card_content_esperados = dbc.CardGroup(
+    [
+        dbc.Card(
+            html.Div(className="bi bi-box-seam", style=card_icon),
+            className="bg-primary",
+            style={"maxWidth": 75},
+        ),
+        dbc.Card(
+            dbc.CardBody(
+                [
+                    html.H5("Kilos Esperados", className="card-title"),
+                    dcc.Graph(id='esperado',
+                              config={'displayModeBar': False},
+                              ),
+                ], style={"width": "15rem"}
+            )
+        ),
+    ]
+
+)
+card_content_mejor = dbc.CardGroup(
+    [
+        dbc.Card(
+            html.Div(className="bi bi-hand-thumbs-up", style=card_icon),
+            className="bg-warning",
+            style={"maxWidth": 75},
+        ),
+        dbc.Card(
+            dbc.CardBody(
+                [
+                    html.H5("Mejor Escenario", className="card-title"),
+                    dcc.Graph(id='mejor',
+                             config={'displayModeBar': False},
+                             ),
+                ], style={"width": "15rem"}
+            )
+        ),
+    ]
+
+)
+
+card_content_peor= dbc.CardGroup(
+    [
+        dbc.Card(
+            html.Div(className="bi bi-hand-thumbs-down", style=card_icon),
+            className="bg-info",
+            style={"maxWidth": 75},
+        ),
+        dbc.Card(
+            dbc.CardBody(
+                [
+                    html.H5("Peor Escenario", className="card-title"),
+                    dcc.Graph(id='peor',
+                              config={'displayModeBar': False},
+                             ),
+                ], style={"width": "15rem"}
+            )
+        ),
+    ]
+    # ,className="mt-4 shadow",
+)
+
+cards = html.Div(
+    [
+        dbc.Row(
+            [
+                dbc.Col(dbc.Card(card_content_esperados, color="primary", inverse=True, )),
+                dbc.Col(dbc.Card(card_content_mejor, color="warning", inverse=True)),
+                dbc.Col(dbc.Card(card_content_peor, color="info", inverse=True)),
+            ],
+            className="mb-4",
+        )])
+
+
 
 layout = html.Div(
     dbc.Row([
@@ -50,10 +132,7 @@ layout = html.Div(
                                               'margin-right': '0px',
                                               'marginTop': '3px',
                                               'background-color': 'black'}),
-        dbc.Col([dbc.Card(dbc.CardBody([html.P(" "),
-                                        html.H5("Motivo", className="card-title"),
-                                        html.P(" "),
-                                        html.P("El pronóstico de kilos brutos para la semana del ... es .... kg")])),
+        dbc.Col([cards,
                 dcc.Graph(id="time-series-chart")], width=8, style={'marginLeft': '20px',
                                                                      'margin-right': '30px',
                                                                      'marginTop': '3px',
@@ -88,9 +167,10 @@ def display_time_series(ticker):
         go.Scatter(x=p_['ds'], y=p_['p75'], mode='lines', line=dict(color='orange'), name='p75', fill='tonexty',
                    fillcolor='rgba(255, 165, 0, 0.2)'))
     fig.add_trace(go.Scatter(x=p_['ds'], y=p_['pred'], mode='lines', line=dict(color='orange'), name='Forecast'))
-
+    fig.update_yaxes(gridcolor='#3b3939')
     fig.update_xaxes(
         rangeslider_visible=False,
+        gridcolor='#3b3939',
         rangeselector=dict(
             buttons=list([
                 dict(count=1, label="1m", step="month", stepmode="backward"),
@@ -107,6 +187,87 @@ def display_time_series(ticker):
                       xaxis_rangeselector_font_color='white',
                       xaxis_rangeselector_activecolor='orange',
                       xaxis_rangeselector_bgcolor='#2a9fd6',
-                      xaxis_title='Semana', yaxis_title=f'{ticker}'
+                      xaxis_title='Semana', yaxis_title='kilos'
                       )
     return fig
+
+##cards
+
+##kilos esperados
+
+@callback(
+    Output('esperado', 'figure'),
+    Input('ticker', 'value')
+)
+def update_kilos(ticker):
+
+    df = all_preds.loc[all_preds['family'] == ticker]
+    a = float(str(list(df.pred)[0]))
+
+    return {
+        'data': [go.Indicator(
+            mode="number",
+            value=a,
+            number={'suffix': " kg", "font": {"size": 24}, "valueformat": ",.0f"},
+            domain={'x': [0, 1], 'y': [0, 1]}
+        )],
+        'layout': go.Layout(
+            height=30,
+            font=dict(color='white'),
+            paper_bgcolor='#282828'
+        )
+
+    }
+
+##mejor escenario
+
+@callback(
+    Output('mejor', 'figure'),
+    Input('ticker', 'value')
+)
+def update_kilos(ticker):
+
+    df = all_preds.loc[all_preds['family'] == ticker]
+    a = float(str(list(df.p75)[0]))
+
+    return {
+        'data': [go.Indicator(
+            mode="number",
+            value=a,
+            number={'suffix': " kg", "font": {"size": 24}, "valueformat": ",.0f"},
+            domain={'x': [0, 1], 'y': [0, 1]}
+        )],
+        'layout': go.Layout(
+            height=30,
+            font=dict(color='white'),
+            paper_bgcolor='#282828'
+        )
+
+    }
+
+##peor escenario
+
+@callback(
+    Output('peor', 'figure'),
+    Input('ticker', 'value')
+)
+def update_kilos(ticker):
+
+    df = all_preds.loc[all_preds['family'] == ticker]
+    a = float(str(list(df.p25)[0]))
+
+    return {
+        'data': [go.Indicator(
+            mode="number",
+            value=a,
+            number={'suffix': " kg", "font": {"size": 24}, "valueformat": ",.0f"},
+            domain={'x': [0, 1], 'y': [0, 1]}
+        )],
+        'layout': go.Layout(
+            height=30,
+            font=dict(color='white'),
+            paper_bgcolor='#282828'
+        )
+
+    }
+
