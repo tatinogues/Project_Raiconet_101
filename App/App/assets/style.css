@@ -3,6 +3,12 @@
     background-color: black;
     margin_top
 }
+.dash-filter input {
+    text-align: inherit !important;
+}
+.dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner th {
+    background-color: #555;
+}
 
 .button {
   border-radius: 50%}

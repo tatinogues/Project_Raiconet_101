@@ -30,6 +30,7 @@ pd.options.plotting.backend = "plotly"
 load_figure_template(["darkly"])
 LOGO = "assets/logo_tix_principio.png"
 
+
 nav = dbc.Nav(
     [
         dbc.NavLink(
@@ -45,8 +46,6 @@ nav = dbc.Nav(
         "width": "100%",
         'height': '50px',
         "textAlign": "left",
-        # "borderStyle": "solid",
-        # "marginTop": '187.5',
         'marginBottom': '5px',
         'fontSize': '15px',
         'margin': '20px',
