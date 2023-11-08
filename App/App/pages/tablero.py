@@ -7,15 +7,45 @@ import dash
 from dash import Dash, dcc, html, Input, Output, callback, dash_table
 import plotly.express as px
 import pandas as pd
-import datetime
 from dash import dcc
 from datetime import date
 import dash_table
 import dash_bootstrap_components as dbc
-from functions.functions import get_analytics_s3
+import boto3
+import io
 import plotly.graph_objects as go
 
 dash.register_page(__name__, path="/analytics", name='ANALYTICS')
+
+def get_analytics_s3():
+    '''Lee la data de analytics guardado en el bucket'''
+    aws_access_key_id = 'AKIAWHI7FC5DZQSWTTN7'
+    aws_secret_access_key = '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'
+    region_name = "us-east-1"
+
+    s3 = boto3.client('s3', aws_access_key_id=aws_access_key_id,
+                      aws_secret_access_key=aws_secret_access_key,
+                      region_name=region_name)
+
+    bucket_name = 'proyectotati'
+    s3_path = 'analytics/data_mes_historico.csv'
+
+    try:
+
+        response = s3.get_object(Bucket=bucket_name, Key=s3_path)
+
+        # Lee el contenido del archivo en un DataFrame
+        df = pd.read_csv(io.BytesIO(response['Body'].read()))
+
+
+        print("Data Analytics leido con exito")
+
+        return df
+
+    except Exception as e:
+        print(f'Error al cargar el archivo desde S3: {str(e)}')
+        return None
+
 
 df = get_analytics_s3()
 

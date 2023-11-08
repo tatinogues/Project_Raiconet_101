@@ -60,8 +60,6 @@ class Train:
 
         predictor = estimator.train(train_ds)
 
-        print("AJUSTAR EPOCHS A 210 :)")
-
         print("Entrenamiento Glounts DeepAr - Completo")
 
         return predictor

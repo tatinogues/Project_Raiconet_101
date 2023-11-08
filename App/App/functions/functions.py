@@ -71,7 +71,7 @@ def get_forecast_s3():
         lista_df = ['impo_1', 'impo_2', 'impo_3', 'impo_4', 'impo_5', 'impo_6', 'impo_7',
                     'expo_1', 'expo_2', 'expo_3', 'expo_4', 'expo_5']
 
-        nombres_motivos = ['USA FLAT', 'ORIENTE FEDEX', 'CHINA LATIN LOGISTIC  CO via UPS/FEDEX', 'EUROPA UPS',
+        nombres_motivos = ['USA FLAT', 'ORIENTE UPS', 'CHINA LATIN LOGISTIC  CO via UPS/FEDEX', 'EUROPA UPS',
                            'Courier Oriente FLAT Wish/Latin logistic', 'Impo Geobox Flat ', 'UPS MERCOSUR',
                            'Exporta Simple - Puerta-Aeropuerto', 'CARGA AEREA EXPO PREPAID', 'CARGA AEREA EXPO - Q',
                            '4-Expo - Fedex Economy', '6-Expo-UPS Express']

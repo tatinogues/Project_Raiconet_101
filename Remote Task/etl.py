@@ -73,14 +73,15 @@ class ETL:
         df.reset_index(inplace=True)
         df.drop(columns='index', inplace=True)
         df['Guias_Fecha'] = pd.to_datetime(df['Guias_Fecha'])
+        df['peso_facturable']= np.maximum(df['Guias_Peso'], df['Guias_PesoVol'])
 
-        df.rename(columns={'Guias_Peso': 'y',
+        df.rename(columns={'peso_facturable': 'y',
                            'Guias_Fecha': 'ds'}, inplace=True)
 
         # agrupamos por semana => porque las entradas estan separadas, asi q nos quedamos con el total de kilos por fecha
         df = df.groupby(['unique_id', pd.Grouper(key='ds', freq='W')])['y'].sum().reset_index()
 
-        end_date = pd.to_datetime(date(2023, 9, 23))
+        end_date = pd.to_datetime(date.today())
         start_date = pd.to_datetime(date(2019, 1, 1))
 
         df = df.loc[(df['ds'] >= start_date)]

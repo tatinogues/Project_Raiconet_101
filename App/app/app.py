@@ -3,6 +3,7 @@
 
 
 import dash
+#import awsgi
 import dash_auth
 import pandas as pd
 from dash import html, dcc
@@ -16,6 +17,8 @@ VALID_USERNAME_PASSWORD_PAIRS = {
 }
 
 app = dash.Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.CYBORG,  dbc.icons.BOOTSTRAP])
+
+server = app.server
 
 ##Auth de ingreso
 auth = dash_auth.BasicAuth(
@@ -83,3 +86,6 @@ app.layout = dbc.Container([
 # run app
 if __name__ == '__main__':
     app.run_server(debug=False, host="0.0.0.0", port=8085)
+    
+#def lambda_handler(event, context):
+#    return awsgi.response(app.server, event, context)
