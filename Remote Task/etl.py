@@ -80,8 +80,10 @@ class ETL:
 
         # agrupamos por semana => porque las entradas estan separadas, asi q nos quedamos con el total de kilos por fecha
         df = df.groupby(['unique_id', pd.Grouper(key='ds', freq='W')])['y'].sum().reset_index()
-
-        end_date = pd.to_datetime(date.today())
+        #como el domingo es el primer dia donde arranca la semana si toma la data del domingo claramente queda en cero, por eso es hasta los valores del sabado
+        today=date.today()
+        yesterday = today - timedelta(days = 1)
+        end_date=pd.to_datetime(yesterday)
         start_date = pd.to_datetime(date(2019, 1, 1))
 
         df = df.loc[(df['ds'] >= start_date)]
@@ -176,11 +178,11 @@ class ETL:
         # 1. Primero, convierte la columna 'Guias_Fecha' a tipo de dato datetime
         df_guias['Guias_Fecha'] = pd.to_datetime(df_guias['Guias_Fecha'])
         
+        df_guias.loc[df_guias['Guias_Fecha'].dt.strftime('%Y-%m') == '2023-12', 'Guias_Fecha'] = '2022-12'
+        
         start_date = pd.to_datetime(date(2023, 1, 1))
 
         df_guias = df_guias.loc[(df_guias['Guias_Fecha'] >= start_date)]
-
-        df_guias.loc[df_guias['Guias_Fecha'].dt.strftime('%Y-%m') == '2023-12', 'Guias_Fecha'] = '2022-12'
         
         df_guias.rename(columns={'unique_id': 'Nombre Motivo', 
                                 'Clientes_Nombre':'Cliente'},

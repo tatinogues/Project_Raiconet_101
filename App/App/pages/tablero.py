@@ -17,6 +17,7 @@ import plotly.graph_objects as go
 
 dash.register_page(__name__, path="/analytics", name='ANALYTICS')
 
+
 def get_analytics_s3():
     '''Lee la data de analytics guardado en el bucket'''
     aws_access_key_id = 'AKIAWHI7FC5DZQSWTTN7'
@@ -36,11 +37,13 @@ def get_analytics_s3():
 
         # Lee el contenido del archivo en un DataFrame
         df = pd.read_csv(io.BytesIO(response['Body'].read()))
-
+        todos = df.copy()
+        todos['Nombre Motivo']='Seleccionar todos'
+        dff = pd.concat([df, todos], ignore_index=True)
 
         print("Data Analytics leido con exito")
 
-        return df
+        return dff
 
     except Exception as e:
         print(f'Error al cargar el archivo desde S3: {str(e)}')
@@ -53,7 +56,7 @@ print(df.columns)
 # https://www.youtube.com/watch?v=bDXypNBH1uw
 
 ultimo_mes = list(df.mes_año.unique())[-1]
-dff= df[df['mes_año']== ultimo_mes]
+dff = df[df['mes_año'] == ultimo_mes]
 
 dropdown1 = dcc.Dropdown(
     id="ticker_motivo",
@@ -67,7 +70,7 @@ dropdown1 = dcc.Dropdown(
 dropdown2 = dcc.Dropdown(
     id="ticker_mes",
     options=[{"label": family, "value": family} for family in df["mes_año"].unique()],
-    value="2023-09",
+    value=ultimo_mes,
     placeholder="Seleccionar mes",
     clearable=True,
     style={'background-color': 'grey'}
@@ -82,7 +85,7 @@ first_card = html.Div(
                 dropdown1,
                 html.P(" "),
                 dropdown2,
-                dbc.Button('Forecast', id="btn_forecast", color="primary", href='http://127.0.0.1:8085/forecast',
+                dbc.Button('Forecast', id="btn_forecast", color="primary", href='/forecast',
                            style={'margin-top': '20px', 'margin-left': '8px'}),
             ]
         )
@@ -157,7 +160,6 @@ card_content_clientes = dbc.CardGroup(
             )
         ),
     ]
-    # ,className="mt-4 shadow",
 )
 
 cards = html.Div(
@@ -296,8 +298,9 @@ cards_tipo_servicios = html.Div(
 
 ###table
 def generate_table_data():
-    meses_filtrados = df['mes_año'].unique()[-5:]
-    df_filtrado = df[df['mes_año'].isin(meses_filtrados)]
+    dff= df[df['Nombre Motivo']!='Seleccionar todos']
+    meses_filtrados = dff['mes_año'].unique()[-5:]
+    df_filtrado = dff[dff['mes_año'].isin(meses_filtrados)]
 
     # 2. Pivotar el DataFrame para obtener una columna por cada mes
     df_pivot = df_filtrado.pivot_table(index=['Cliente', 'Nombre Motivo'],
@@ -312,7 +315,6 @@ def generate_table_data():
     # Agregar "kg" al final de cada valor en la tabla
     df_pivot.iloc[:, 2:] = df_pivot.iloc[:, 2:].applymap(lambda x: f"{x} kg")
 
-
     return df_pivot
 
 
@@ -323,7 +325,7 @@ table = dash_table.DataTable(
     [{"name": i, "id": i} for i in df_table.columns],
     filter_action="native",
     sort_action="native",
-    sort_mode= "multi",
+    sort_mode="multi",
     filter_options={"placeholder_text": "Filter column..."},
     page_size=15,
     style_as_list_view=True,
@@ -337,14 +339,14 @@ table = dash_table.DataTable(
         'backgroundColor': '#2a9fd6',
         'fontWeight': 'bold',
         'color': 'white',
-        'fontSize':15
+        'fontSize': 15
     },
     style_data={
         'color': '#adafae',
-        'backgroundColor': '#282828'  # 555'
+        'backgroundColor': '#282828'
     },
-    style_cell={'fontSize':14,
-                'font-family':'Roboto',
+    style_cell={'fontSize': 14,
+                'font-family': 'Roboto',
                 'padding-right': '10px',
                 'padding-left': '10px'}
 
@@ -352,11 +354,11 @@ table = dash_table.DataTable(
 
 ###Download button
 download_excel_button = html.Div([
-                                dbc.Button('Descargar Excel', id="btn_xlsx", color="primary",
-                                           style={'margin-top': '8px',
-                                                  'margin-left': '1220px',
-                                                  'margin-bottom': '8px'}),
-                                dcc.Download(id="download-dataframe-xlsx"),
+    dbc.Button('Descargar Excel', id="btn_xlsx", color="primary",
+               style={'margin-top': '8px',
+                      'margin-left': '1220px',
+                      'margin-bottom': '8px'}),
+    dcc.Download(id="download-dataframe-xlsx"),
 ])
 
 ##page layout
@@ -372,11 +374,12 @@ layout = html.Div([
                                                        'marginTop': '3px',
                                                        'background-color': 'black'})]),
 
-    dbc.Row(dbc.Col([download_excel_button,table], width=11, style={'marginLeft': '60px',
-                                                                    'margin-right': '0px',
-                                                                    'marginTop': '3px',
-                                                                    'background-color': 'black'}))
+    dbc.Row(dbc.Col([download_excel_button, table], width=11, style={'marginLeft': '60px',
+                                                                     'margin-right': '0px',
+                                                                     'marginTop': '3px',
+                                                                     'background-color': 'black'}))
 ])
+
 
 ##CALLBACKS!!!
 
@@ -388,6 +391,7 @@ layout = html.Div([
 )
 def func(n_clicks):
     return dcc.send_data_frame(df_table.to_excel, "Raiconet Data.xlsx", sheet_name="Clientes", index=False)
+
 
 ### callback pie chart
 @callback(
@@ -406,17 +410,19 @@ def display_pie_chart(value, date):
                  color_discrete_sequence=['#2a9fd6', '#77b300', '#fd7e14', '#6f42c1'])
 
     fig.update_layout(
-        margin=dict(l=20, r=20, t=10, b=10),
-        legend=dict(
-            orientation="h",
-            yanchor="top",
-            y=1.02,
-            xanchor="right",
-            x=1
-        ),
-        legend_title_text='Categoria',
+        margin=dict(l=20, r=20, t=60, b=10),
+       # legend=dict(
+        #    orientation="h",
+         #   yanchor="top",
+          #  y=1.02,
+           # xanchor="right",
+            #x=1
+       # ),
+        #legend_title_text='Categoria',
     )
     fig.update_traces(textfont_size=15, textinfo='percent+label', textfont_color='white')
+    fig.update(layout_title_text='Categoria de Clientes',
+               layout_showlegend=False)
     return fig
 
 
@@ -449,7 +455,8 @@ def display_time_series(value):
     Input('ticker_mes', 'value')
 )
 def update_kilos(date):
-    dff = df[df['Tipo2'] == 'Courier Impo']
+    df1 = df[df['Nombre Motivo'] != 'Seleccionar todos']
+    dff = df1[df1['Tipo2'] == 'Courier Impo']
 
     df_filtro = dff[dff['mes_año'] == date]
 
@@ -475,7 +482,8 @@ def update_kilos(date):
             value=total_kilos,
             number={'suffix': " kg", "font": {"size": 18}, "valueformat": ",.0f"},
             delta={'position': "right", 'reference': total_kilos_mes_anterior,
-                   'relative': False, },
+                   'relative': True,
+                   "valueformat": ".1%"},
             domain={'x': [0, 1], 'y': [0, 1]}
         )],
         'layout': go.Layout(
@@ -494,7 +502,8 @@ def update_kilos(date):
     Input('ticker_mes', 'value')
 )
 def update_kilos(date):
-    dff = df[df['Tipo2'] == 'Courier Expo']
+    df1 = df[df['Nombre Motivo'] != 'Seleccionar todos']
+    dff = df1[df1['Tipo2'] == 'Courier Expo']
 
     df_filtro = dff[dff['mes_año'] == date]
 
@@ -520,7 +529,8 @@ def update_kilos(date):
             value=total_kilos,
             number={'suffix': " kg", "font": {"size": 18}, "valueformat": ",.0f"},
             delta={'position': "right", 'reference': total_kilos_mes_anterior,
-                   'relative': False, },
+                   'relative': True,
+                   "valueformat": ".1%"},
             domain={'x': [0, 1], 'y': [0, 1]}
         )],
         'layout': go.Layout(
@@ -539,7 +549,8 @@ def update_kilos(date):
     Input('ticker_mes', 'value')
 )
 def update_kilos(date):
-    dff = df[df['Tipo2'] == 'Exporta Simple']
+    df1 = df[df['Nombre Motivo'] != 'Seleccionar todos']
+    dff = df1[df1['Tipo2'] == 'Exporta Simple']
 
     df_filtro = dff[dff['mes_año'] == date]
 
@@ -565,7 +576,8 @@ def update_kilos(date):
             value=total_kilos,
             number={'suffix': " kg", "font": {"size": 18}, "valueformat": ",.0f"},
             delta={'position': "right", 'reference': total_kilos_mes_anterior,
-                   'relative': False, },
+                   'relative': True,
+                   "valueformat": ".1%"},
             domain={'x': [0, 1], 'y': [0, 1]}
         )],
         'layout': go.Layout(
@@ -583,7 +595,8 @@ def update_kilos(date):
     Input('ticker_mes', 'value')
 )
 def update_kilos(date):
-    dff = df[df['Tipo2'] == 'Carga']
+    df1 = df[df['Nombre Motivo'] != 'Seleccionar todos']
+    dff = df1[df1['Tipo2'] == 'Carga']
 
     df_filtro = dff[dff['mes_año'] == date]
 
@@ -601,7 +614,7 @@ def update_kilos(date):
 
     df_filtro_mes_anterior = dff[dff['mes_año'] == date_anterior]
 
-    total_kilos_mes_anterior = df_filtro_mes_anterior['kilos facturables'].sum()
+    total_kilos_mes_anterior = df_filtro_mes_anterior['Guias_Numero'].sum()
 
     return {
         'data': [go.Indicator(
@@ -609,7 +622,8 @@ def update_kilos(date):
             value=total_kilos,
             number={'suffix': " guias", "font": {"size": 18}, "valueformat": ",.0f"},
             delta={'position': "right", 'reference': total_kilos_mes_anterior,
-                   'relative': False, },
+                   'relative': True,
+                   "valueformat": ".1%"},
             domain={'x': [0, 1], 'y': [0, 1]}
         )],
         'layout': go.Layout(
@@ -654,7 +668,8 @@ def update_kilos(value, date):
             value=total_kilos,
             number={'suffix': " kg", "font": {"size": 24}, "valueformat": ",.0f"},
             delta={'position': "right", 'reference': total_kilos_mes_anterior,
-                   'relative': False, },
+                   'relative': True,
+                   "valueformat": ".1%"},
             domain={'x': [0, 1], 'y': [0, 1]}
         )],
         'layout': go.Layout(
@@ -691,7 +706,7 @@ def update_guias(value, date):
 
     df_filtro_mes_anterior = dff[dff['mes_año'] == date_anterior]
 
-    total_guias_mes_anterior = df_filtro_mes_anterior['Guias_Numero'].unique().sum()
+    total_guias_mes_anterior = df_filtro_mes_anterior['Guias_Numero'].sum()
 
     return {
         'data': [go.Indicator(
@@ -699,7 +714,8 @@ def update_guias(value, date):
             value=total_guias,
             number={'suffix': " guias", "font": {"size": 24}, "valueformat": ",.0f"},
             delta={'position': "right", 'reference': total_guias_mes_anterior,
-                   'relative': False, },
+                   'relative': True,
+                   "valueformat": ".1%"},
             domain={'x': [0, 1], 'y': [0, 1]}
         )],
         'layout': go.Layout(
@@ -743,8 +759,10 @@ def update_guias(value, date):
             mode="number+delta",
             value=total_clientes,
             number={'suffix': " clientes", "font": {"size": 24}, "valueformat": ",.0f"},
-            delta={'position': "right", 'reference': total_clientes_mes_anterior,
-                   'relative': False, },
+            delta={'position': "right",
+                   'reference': total_clientes_mes_anterior,
+                   'relative': True,
+                   "valueformat": ".1%"},
             domain={'x': [0, 1], 'y': [0, 1]}
         )],
         'layout': go.Layout(

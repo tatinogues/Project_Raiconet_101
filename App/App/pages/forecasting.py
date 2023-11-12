@@ -134,7 +134,7 @@ first_card = dbc.Card(
             html.P("Seleccione el motivo para obtener las predicciones de las próximas 10 semanas"),
             dcc.Download(id="download-dataframe-xlsx"),
             dropdown,
-            dbc.Button('Analytics', id="btn_dashboard", color="primary",href='http://127.0.0.1:8085/analytics',
+            dbc.Button('Analytics', id="btn_dashboard", color="primary",href='/analytics',
                        style={'margin-top': '20px', 'margin-left': '8px'}),
         ]
     )

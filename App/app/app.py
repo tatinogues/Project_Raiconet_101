@@ -14,6 +14,10 @@ VALID_USERNAME_PASSWORD_PAIRS = {
     'tatinogues': '1234',
     'hello': 'world',
     'demo':'helloworld',
+    'cesarreyes': 'iiddqqdd',
+    'enogues': 'iiddqqdd',
+    'raico_analytics': 'iiddqqdd',
+    'mama':'te quiero',
 }
 
 app = dash.Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.CYBORG,  dbc.icons.BOOTSTRAP])
@@ -85,7 +89,7 @@ app.layout = dbc.Container([
 
 # run app
 if __name__ == '__main__':
-    app.run_server(debug=False, host="0.0.0.0", port=8085)
+    app.run_server(debug=False, host="0.0.0.0", port=8050)
     
 #def lambda_handler(event, context):
 #    return awsgi.response(app.server, event, context)
