@@ -14,10 +14,10 @@ load_figure_template(["darkly"])
 
 dash.register_page(__name__, path='/forecast', name='FORECAST')
 
+
 ##https://fontawesome.bootstrapcheatsheets.com/
 
 def get_data_s3():
-
     '''Descarga un archivo desde un bucket de S3 y carga los datos en un DataFrame'''
     aws_access_key_id = 'AKIAWHI7FC5DZQSWTTN7'
     aws_secret_access_key = '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'
@@ -64,6 +64,7 @@ def get_data_s3():
     except Exception as e:
         print(f'Error al cargar el archivo desde S3: {str(e)}')
         return None
+
 
 def get_forecast_s3():
     '''Lee el forecast guardado en el bucket para mostrar las predicciones en la grafica'''
@@ -115,6 +116,7 @@ def get_forecast_s3():
         print(f'Error al cargar el archivo desde S3: {str(e)}')
         return None
 
+
 df = get_data_s3()
 all_preds = get_forecast_s3()
 
@@ -134,7 +136,7 @@ first_card = dbc.Card(
             html.P("Seleccione el motivo para obtener las predicciones de las próximas 10 semanas"),
             dcc.Download(id="download-dataframe-xlsx"),
             dropdown,
-            dbc.Button('Analytics', id="btn_dashboard", color="primary",href='/analytics',
+            dbc.Button('Analytics', id="btn_dashboard", color="primary", href='/analytics',
                        style={'margin-top': '20px', 'margin-left': '8px'}),
         ]
     )
@@ -182,8 +184,8 @@ card_content_mejor = dbc.CardGroup(
                 [
                     html.H5("Mejor Escenario", className="card-title"),
                     dcc.Graph(id='mejor',
-                             config={'displayModeBar': False},
-                             ),
+                              config={'displayModeBar': False},
+                              ),
                 ], style={"width": "15rem"}
             )
         ),
@@ -191,7 +193,7 @@ card_content_mejor = dbc.CardGroup(
 
 )
 
-card_content_peor= dbc.CardGroup(
+card_content_peor = dbc.CardGroup(
     [
         dbc.Card(
             html.Div(className="bi bi-hand-thumbs-down", style=card_icon),
@@ -204,7 +206,7 @@ card_content_peor= dbc.CardGroup(
                     html.H5("Peor Escenario", className="card-title"),
                     dcc.Graph(id='peor',
                               config={'displayModeBar': False},
-                             ),
+                              ),
                 ], style={"width": "15rem"}
             )
         ),
@@ -223,8 +225,6 @@ cards = html.Div(
             className="mb-4",
         )])
 
-
-
 layout = html.Div(
     dbc.Row([
         dbc.Col([first_card], width=3, style={'marginLeft': '50px',
@@ -232,10 +232,10 @@ layout = html.Div(
                                               'marginTop': '3px',
                                               'background-color': 'black'}),
         dbc.Col([cards,
-                dcc.Graph(id="time-series-chart")], width=8, style={'marginLeft': '20px',
+                 dcc.Graph(id="time-series-chart")], width=8, style={'marginLeft': '20px',
                                                                      'margin-right': '30px',
                                                                      'marginTop': '3px',
-                                                                     #'margin': '30px',
+                                                                     # 'margin': '30px',
                                                                      'background-color': 'black'}),
 
     ]))
@@ -250,9 +250,7 @@ def display_time_series(ticker):
     df_pivot = df_pivot.fillna(0)
 
     fig = px.line(df_pivot, x='ds', y=ticker,
-                  #title="Seleccionar el periodo",
                   template='plotly_dark',
-                  #color_discrete_sequence=["#2a9fd6"]
                   )
     # bandas de percentiles
     p_ = all_preds.loc[all_preds['family'] == ticker]
@@ -290,6 +288,7 @@ def display_time_series(ticker):
                       )
     return fig
 
+
 ##cards
 
 ##kilos esperados
@@ -299,7 +298,6 @@ def display_time_series(ticker):
     Input('ticker', 'value')
 )
 def update_kilos(ticker):
-
     df = all_preds.loc[all_preds['family'] == ticker]
     a = float(str(list(df.pred)[0]))
 
@@ -318,6 +316,7 @@ def update_kilos(ticker):
 
     }
 
+
 ##mejor escenario
 
 @callback(
@@ -325,7 +324,6 @@ def update_kilos(ticker):
     Input('ticker', 'value')
 )
 def update_kilos(ticker):
-
     df = all_preds.loc[all_preds['family'] == ticker]
     a = float(str(list(df.p75)[0]))
 
@@ -344,6 +342,7 @@ def update_kilos(ticker):
 
     }
 
+
 ##peor escenario
 
 @callback(
@@ -351,7 +350,6 @@ def update_kilos(ticker):
     Input('ticker', 'value')
 )
 def update_kilos(ticker):
-
     df = all_preds.loc[all_preds['family'] == ticker]
     a = float(str(list(df.p25)[0]))
 
@@ -369,4 +367,3 @@ def update_kilos(ticker):
         )
 
     }
-

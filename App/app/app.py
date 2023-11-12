@@ -1,9 +1,6 @@
 # https://medium.com/codex/how-to-create-a-dashboard-with-a-contact-form-using-python-and-dash-ee3aacffd349
 # https://towardsdatascience.com/use-these-principles-to-design-brilliant-dashboards-f3dc57a2743e
-
-
 import dash
-#import awsgi
 import dash_auth
 import pandas as pd
 from dash import html, dcc
@@ -63,7 +60,6 @@ nav = dbc.Nav(
 app.layout = dbc.Container([
     dbc.Row([
         dbc.Col(html.A(
-            # Use row and col to control vertical alignment of logo / brand
             dbc.Row(
                 [
                     dbc.Col(html.Img(src=LOGO, height="98px"))
@@ -87,9 +83,5 @@ app.layout = dbc.Container([
     ]),
 ], fluid=True)
 
-# run app
 if __name__ == '__main__':
     app.run_server(debug=False, host="0.0.0.0", port=8050)
-    
-#def lambda_handler(event, context):
-#    return awsgi.response(app.server, event, context)

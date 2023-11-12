@@ -1,14 +1,9 @@
-import dash
 import dcc as dcc
-from dash import Dash, dcc, html, Input, Output, callback
-import plotly.express as px
-import dash_bootstrap_components as dbc
 import dash
 from dash import Dash, dcc, html, Input, Output, callback, dash_table
 import plotly.express as px
 import pandas as pd
 from dash import dcc
-from datetime import date
 import dash_table
 import dash_bootstrap_components as dbc
 import boto3
@@ -34,8 +29,6 @@ def get_analytics_s3():
     try:
 
         response = s3.get_object(Bucket=bucket_name, Key=s3_path)
-
-        # Lee el contenido del archivo en un DataFrame
         df = pd.read_csv(io.BytesIO(response['Body'].read()))
         todos = df.copy()
         todos['Nombre Motivo']='Seleccionar todos'
@@ -301,8 +294,6 @@ def generate_table_data():
     dff= df[df['Nombre Motivo']!='Seleccionar todos']
     meses_filtrados = dff['mes_año'].unique()[-5:]
     df_filtrado = dff[dff['mes_año'].isin(meses_filtrados)]
-
-    # 2. Pivotar el DataFrame para obtener una columna por cada mes
     df_pivot = df_filtrado.pivot_table(index=['Cliente', 'Nombre Motivo'],
                                        columns='mes_año',
                                        values='kilos facturables',
@@ -310,9 +301,8 @@ def generate_table_data():
                                        fill_value=0)
 
     df_pivot['Total'] = df_pivot.sum(axis=1)
-    df_pivot = df_pivot.reset_index()  # Restablecer los índices
+    df_pivot = df_pivot.reset_index()
     df_pivot = df_pivot.sort_values(by='Total', ascending=False)
-    # Agregar "kg" al final de cada valor en la tabla
     df_pivot.iloc[:, 2:] = df_pivot.iloc[:, 2:].applymap(lambda x: f"{x} kg")
 
     return df_pivot
@@ -411,17 +401,9 @@ def display_pie_chart(value, date):
 
     fig.update_layout(
         margin=dict(l=20, r=20, t=60, b=10),
-       # legend=dict(
-        #    orientation="h",
-         #   yanchor="top",
-          #  y=1.02,
-           # xanchor="right",
-            #x=1
-       # ),
-        #legend_title_text='Categoria',
     )
     fig.update_traces(textfont_size=15, textinfo='percent+label', textfont_color='white')
-    fig.update(layout_title_text='Categoria de Clientes',
+    fig.update(layout_title_text='Categoría de Clientes',
                layout_showlegend=False)
     return fig
 
@@ -438,7 +420,7 @@ def display_time_series(value):
     dff.rename(columns={'mes_año': 'Mes'}, inplace=True)
 
     fig = px.line(dff, x='Mes', y='kilos facturables', markers=True, width=657, height=400)
-    fig.update_traces(line_color='#2a9fd6')  ####77b300  ####6610f2 ####2a9fd6
+    fig.update_traces(line_color='#2a9fd6')
     fig.update_layout(xaxis_title='Período',
                       yaxis_title='kilos',
                       title=f'Evolución kilos facturables {value}'
