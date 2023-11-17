@@ -164,10 +164,10 @@ class Metrics:
         self.forecasted_values= forecasted_values
 
 
-    def calculate_smape(self):
+    def calculate_smape(actual_values, forecasted_values):
         absolute_percentage_errors = []
     
-        for actual, forecasted in zip(self.actual_values, self.forecasted_values):
+        for actual, forecasted in zip(actual_values, forecasted_values):
             numerator = abs(actual - forecasted)
             denominator = (abs(actual) + abs(forecasted)) + 1e-9  # Agregar una constante para evitar división por cero
             ape = numerator / (denominator / 2)

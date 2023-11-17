@@ -1,5 +1,4 @@
 # toma el modelo guardado en pickle y hace predicciones con la data completa guardado en pre_trained
-
 import pandas as pd
 import boto3
 import io
