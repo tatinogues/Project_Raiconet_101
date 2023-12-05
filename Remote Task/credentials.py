@@ -1,8 +1,8 @@
-UID = 'lauranogues'
-PWD='1234holasoyhacker'
-Server ='172.16.2.49'
+UID = 'username'
+PWD='password'
+Server ='server number'
 
 #AWS
-aws_access_key_id = 'AKIAWHI7FC5DZQSWTTN7'
-aws_secret_access_key = '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'
+aws_access_key_id = 'access key'
+aws_secret_access_key = 'secret access key'
 region_name = "us-east-1"
