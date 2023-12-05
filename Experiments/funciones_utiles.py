@@ -164,10 +164,10 @@ class Metrics:
         self.forecasted_values= forecasted_values
 
 
-    def calculate_smape(actual_values, forecasted_values):
+    def calculate_smape(self):
         absolute_percentage_errors = []
     
-        for actual, forecasted in zip(actual_values, forecasted_values):
+        for actual, forecasted in zip(self.actual_values, self.forecasted_values):
             numerator = abs(actual - forecasted)
             denominator = (abs(actual) + abs(forecasted)) + 1e-9  # Agregar una constante para evitar división por cero
             ape = numerator / (denominator / 2)
@@ -203,8 +203,8 @@ def guardar_metricas(comparison_tbl, all_preds, exetime, model_name):
             smape = sum(absolute_percentage_errors) / len(absolute_percentage_errors)
             return smape
             
-        for fam in list(all_preds.family.unique()): 
-            df_pred= all_preds[all_preds['family']== fam]
+        for fam in list(all_preds.unique_id.unique()): 
+            df_pred= all_preds[all_preds['unique_id']== fam]
             actual_values= df_pred['y']
             predicted_values= df_pred['pred']
                 
