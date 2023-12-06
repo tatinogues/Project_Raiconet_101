@@ -8,7 +8,7 @@ Universidad de Montevideo
 http://raico-analytics.raiconet.com/
 
 Este proyecto de ciencia de datos tiene como objetivo principal mejorar la eficiencia en la toma de decisiones en la empresa de transporte internacional Raiconet, a través de la identificación y predicción de cambios en el volumen de carga a lo largo del tiempo. 
-/n
+
 La relevancia de este proyecto radica en la capacidad de anticiparse a las fluctuaciones de los kilos transportados, lo que permitirá tomar decisiones informadas en aspectos cruciales como la asignación de horas de operación en aduana, la determinación estratégica en los cupos y asignación de vuelos semanales, así como también la planificación estratégica de ventas futuras y capacidad de transporte para las mismas. 
 Para lograrlo, se llevaron a cabo cuatro etapas clave: Exploratory Data Analysis (EDA), Modelado, Desarrollo y Deploy. La fase de EDA implicó comprender el problema y analizar los datos recopilados, mientras que la etapa de Modelado se centró en desarrollar un modelo capaz de capturar tendencias y patrones para resolver el problema. Una vez obtenido el modelo deseado, se procedió a integrarlo en una Dash Web App para que los usuarios pudieran hacer uso de él. Finalmente, en la fase de Deploy, el modelo se llevo a producción utilizando Amazon Web Services, lo que permite que esté disponible para su uso y que se integre en la toma de decisiones diarias.
 
