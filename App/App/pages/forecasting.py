@@ -19,8 +19,8 @@ dash.register_page(__name__, path='/forecast', name='FORECAST')
 
 def get_data_s3():
     '''Descarga un archivo desde un bucket de S3 y carga los datos en un DataFrame'''
-    aws_access_key_id = 'AKIAWHI7FC5DZQSWTTN7'
-    aws_secret_access_key = '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'
+    aws_access_key_id = ''
+    aws_secret_access_key = ''
     region_name = "us-east-1"
 
     s3 = boto3.client('s3', aws_access_key_id=aws_access_key_id,
@@ -68,8 +68,8 @@ def get_data_s3():
 
 def get_forecast_s3():
     '''Lee el forecast guardado en el bucket para mostrar las predicciones en la grafica'''
-    aws_access_key_id = 'AKIAWHI7FC5DZQSWTTN7'
-    aws_secret_access_key = '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'
+    aws_access_key_id = ''
+    aws_secret_access_key = ''
     region_name = "us-east-1"
 
     s3 = boto3.client('s3', aws_access_key_id=aws_access_key_id,

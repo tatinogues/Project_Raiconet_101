@@ -8,13 +8,7 @@ import dash_bootstrap_components as dbc
 from dash_bootstrap_templates import load_figure_template
 
 VALID_USERNAME_PASSWORD_PAIRS = {
-    'tatinogues': '1234',
-    'hello': 'world',
-    'demo':'helloworld',
-    'cesarreyes': 'iiddqqdd',
-    'enogues': 'iiddqqdd',
-    'raico_analytics': 'iiddqqdd',
-    'mama':'te quiero',
+    'username': 'password',
 }
 
 app = dash.Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.CYBORG,  dbc.icons.BOOTSTRAP])

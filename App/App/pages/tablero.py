@@ -15,8 +15,8 @@ dash.register_page(__name__, path="/analytics", name='ANALYTICS')
 
 def get_analytics_s3():
     '''Lee la data de analytics guardado en el bucket'''
-    aws_access_key_id = 'AKIAWHI7FC5DZQSWTTN7'
-    aws_secret_access_key = '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'
+    aws_access_key_id = ''
+    aws_secret_access_key = ''
     region_name = "us-east-1"
 
     s3 = boto3.client('s3', aws_access_key_id=aws_access_key_id,
